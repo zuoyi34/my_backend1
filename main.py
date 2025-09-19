@@ -14,6 +14,10 @@ from auth import verify_password
 
 app = FastAPI()
 
+@app.get("/")
+def root():
+    return {"status": "ok"}
+
 # 允许跨域（前端才能访问）
 app.add_middleware(
     CORSMiddleware,
