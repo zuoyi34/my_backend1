@@ -14,6 +14,20 @@ from auth import verify_password
 
 app = FastAPI()
 
+# ⚡ 全局异常捕获中间件
+from fastapi import Request
+import traceback
+
+@app.middleware("http")
+async def log_exceptions(request: Request, call_next):
+    try:
+        response = await call_next(request)
+        return response
+    except Exception as e:
+        print("Exception during request:", e)
+        traceback.print_exc()  # 打印完整错误堆栈
+        raise e  # 继续抛出异常，让 FastAPI 返回 500
+        
 @app.get("/")
 def root():
     return {"status": "ok"}
